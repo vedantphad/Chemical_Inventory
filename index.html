@@ -6,12 +6,259 @@
     <meta name="theme-color" content="#102a2b" />
     <meta name="description" content="A clear, collaborative chemical inventory for academic laboratories." />
     <title>LabLedger · Chemical inventory</title>
-    <meta property="og:image" content="https://bolt.new/static/og_default.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-lockup">
+          <div class="brand-mark">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>
+          </div>
+          <div><strong>LabLedger</strong><span>Research inventory</span></div>
+        </div>
+        <div class="workspace-switcher">
+          <div class="workspace-avatar">CB</div>
+          <div><small>Workspace</small><strong>Central Biology Lab</strong></div>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a class="nav-item active" href="#inventory">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Overview
+          </a>
+          <a class="nav-item" href="#inventory">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="5" x="5" y="2" rx="1.5"/><path d="M8 22v-4"/><path d="M12 22v-7"/><path d="M16 22v-10"/><path d="M3 7l3 3 3-3"/></svg>
+            Inventory <span class="nav-count" id="nav-inventory-count">6</span>
+          </a>
+          <a class="nav-item" href="#alerts">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            Alerts <span class="nav-count alert-count" id="nav-alert-count">3</span>
+          </a>
+        </nav>
+        <div class="sidebar-section-label">Workspace</div>
+        <nav class="primary-nav">
+          <a class="nav-item" href="#inventory">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Locations
+          </a>
+          <a class="nav-item" href="#scan">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><path d="M3 8h2"/><path d="M3 12h2"/><path d="M3 16h2"/><path d="M3 20h2"/><rect width="5" height="5" x="16" y="3" rx="1"/><path d="M16 8h2"/><path d="M16 12h2"/><path d="M16 16h2"/><path d="M16 20h2"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M8 3h2"/><path d="M8 16h2"/><path d="M12 3h2"/><path d="M12 16h2"/><path d="M12 8h2"/><path d="M12 12h2"/></svg>
+            Scan a label
+          </a>
+          <a class="nav-item" href="#settings">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sync-dot"></div>
+          <div><strong>Workspace synced</strong><span>Just now · all changes saved</span></div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu" aria-label="Open navigation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+          <div class="breadcrumbs">
+            <span>Central Biology Lab</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            <strong>Overview</strong>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button" aria-label="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <i></i>
+            </button>
+            <div class="user-avatar">AK</div>
+          </div>
+        </header>
+
+        <div class="page-wrap">
+          <section class="hero-row">
+            <div>
+              <div class="eyebrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.132 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>
+                <span id="today-date">Monday, November 16, 2026</span>
+              </div>
+              <h1><em>Chemical inventory</em></h1>
+              <p class="hero-copy">Keep your lab chemicals organized, updated, and easy to find.</p>
+              <p class="hero-detail">Track chemical quantities in real time, record every stock movement, and stay informed when reagents are running low.</p>
+            </div>
+            <button class="button button-primary" id="add-reagent-btn">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Add reagent
+            </button>
+          </section>
+
+          <section class="action-section" aria-labelledby="action-heading">
+            <div class="action-heading">
+              <div>
+                <div class="section-kicker">Quick actions</div>
+                <h2 id="action-heading">What would you like to do?</h2>
+              </div>
+              <span class="scan-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 11h-3a3 3 0 0 0-3 3v7"/></svg>
+                QR-ready workflow
+              </span>
+            </div>
+            <div class="action-grid">
+              <article class="action-card action-take">
+                <div class="action-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8 3 11l2.5 3"/><path d="M18.5 8 21 11l-2.5 3"/><path d="M12 4v16"/><path d="M12 4 8 8"/><path d="M12 4l4 4"/></svg>
+                </div>
+                <div><h3>Take a chemical</h3><p>Scan the QR code on a chemical container and record the quantity you are taking.</p></div>
+                <button class="action-link" data-action="take">Take chemical
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </article>
+              <article class="action-card action-return">
+                <div class="action-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/></svg>
+                </div>
+                <div><h3>Return a chemical</h3><p>Scan the QR code and update the inventory when you return a chemical.</p></div>
+                <button class="action-link" data-action="return">Return chemical
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </article>
+              <article class="action-card action-view">
+                <div class="action-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="5" x="5" y="2" rx="1.5"/><path d="M8 22v-4"/><path d="M12 22v-7"/><path d="M16 22v-10"/></svg>
+                </div>
+                <div><h3>View inventory</h3><p>Browse and search the current chemical stock and check which reagents are running low.</p></div>
+                <a class="action-link" href="#inventory">View inventory
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+              </article>
+            </div>
+            <div class="workflow-note">
+              <span>Quick & simple</span>
+              <strong>Scan <i>&rarr;</i> Update <i>&rarr;</i> Done</strong>
+              <p>All stock changes are recorded automatically to keep the inventory up to date.</p>
+            </div>
+          </section>
+
+          <div class="toast" id="toast" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span id="toast-text"></span>
+          </div>
+
+          <section class="stats-grid" aria-label="Inventory summary">
+            <div class="stat-card stat-featured">
+              <div class="stat-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>
+              </div>
+              <div><span>Total reagents</span><strong id="stat-total">6</strong><small><span class="positive">&uarr; 8%</span> from last month</small></div>
+              <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              </div>
+              <div><span>Needs attention</span><strong id="stat-attention">3</strong><small><span class="warning-text" id="stat-low">2 low stock</span> · <span id="stat-expiring">1 expiring</span></small></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div><span>Storage locations</span><strong id="stat-locations">5</strong><small><span class="positive">100%</span> locations mapped</small></div>
+            </div>
+          </section>
+
+          <section class="inventory-layout" id="inventory">
+            <div class="inventory-panel panel">
+              <div class="panel-header">
+                <div><div class="section-kicker">Live inventory</div><h2>Reagent library</h2></div>
+                <button class="text-button">Export list
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </div>
+              <div class="toolbar">
+                <div class="search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input id="search" placeholder="Search reagents, CAS, location..." aria-label="Search inventory" />
+                </div>
+                <button class="filter-button">
+                  <span>Filter</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+              </div>
+              <div class="category-tabs" id="category-tabs"></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Reagent</th><th>Location</th><th>Available</th><th>Status</th><th>Updated</th><th></th></tr>
+                  </thead>
+                  <tbody id="reagent-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+            <aside class="detail-panel panel" id="detail-panel"></aside>
+          </section>
+
+          <section class="bottom-grid" id="alerts">
+            <div class="panel alert-panel">
+              <div class="panel-header">
+                <div><div class="section-kicker">Needs attention</div><h2>Restock & review</h2></div>
+                <a href="#inventory">View all
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+              </div>
+              <div id="alert-list"></div>
+            </div>
+            <div class="panel quick-panel" id="scan">
+              <div class="quick-art">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 11h-3a3 3 0 0 0-3 3v7"/></svg>
+              </div>
+              <div>
+                <div class="section-kicker">Fast entry</div>
+                <h2>Scan a container</h2>
+                <p>Use a QR label to update a reagent in seconds while you are at the bench.</p>
+                <button class="button button-dark">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/></svg>
+                  Open scanner
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="modal-backdrop" hidden>
+      <form class="modal" id="add-form">
+        <div class="modal-heading">
+          <div><div class="section-kicker">New inventory record</div><h2>Add a reagent</h2></div>
+          <button type="button" class="close-button" id="close-modal" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <div class="form-grid">
+          <label>Reagent name<input name="name" required placeholder="e.g. Sodium hydroxide" /></label>
+          <label>Formula<input name="formula" placeholder="e.g. NaOH" /></label>
+          <label>CAS number<input name="cas_number" required placeholder="e.g. 1310-73-2" /></label>
+          <label>Category<select name="category"><option>General</option><option>Inorganic salts</option><option>Acids</option><option>Solvents</option><option>Oxidizers</option><option>Buffers</option></select></label>
+          <label>Quantity<input name="quantity" type="number" min="0" step="any" required placeholder="0" /></label>
+          <label>Unit<select name="unit"><option>g</option><option>mL</option><option>L</option><option>kg</option><option>units</option></select></label>
+          <label>Restock threshold<input name="minimum_quantity" type="number" min="0" step="any" required placeholder="0" /></label>
+          <label>Expiry date<input name="expiry_date" type="date" /></label>
+          <label class="wide-field">Storage location<input name="location" required placeholder="e.g. Cabinet A · Shelf 01" /></label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="button button-quiet" id="cancel-modal">Cancel</button>
+          <button type="submit" class="button button-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add reagent
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="app.js"></script>
   </body>
 </html>
