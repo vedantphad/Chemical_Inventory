@@ -13,6 +13,31 @@ let activeCategory = 'All reagents';
 let searchQuery = '';
 let selectedId = '';
 
+const AUTH_STORAGE_KEY = 'labledger_session';
+
+const DEMO_ACCOUNT = {
+  email: 'admin@labledger.local',
+  password: 'labledger',
+  name: 'Lab Admin',
+  initials: 'LA',
+};
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY)) || null;
+  } catch {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  if (user) {
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  }
+}
+
 function getStatus(reagent) {
   const daysToExpiry = reagent.expiry_date ? Math.ceil((new Date(reagent.expiry_date + 'T00:00:00').getTime() - Date.now()) / 86400000) : 999;
   if (reagent.quantity <= reagent.minimum_quantity) return { label: 'Restock soon', tone: 'warning' };
