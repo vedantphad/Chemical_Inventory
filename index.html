@@ -240,6 +240,77 @@
       </main>
     </div>
 
+<div class="modal-backdrop" id="login-backdrop" hidden>
+  <form class="modal auth-modal" id="login-form">
+
+    <div class="modal-heading">
+      <div>
+        <div class="section-kicker">LabLedger account</div>
+        <h2>Sign in</h2>
+      </div>
+
+      <button type="button" class="close-button" id="close-login" aria-label="Close login">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <p class="auth-intro">
+      Sign in to record chemical movements and manage your lab inventory.
+    </p>
+
+    <div class="auth-error" id="login-error" hidden></div>
+
+    <div class="form-grid auth-form-grid">
+
+      <label class="wide-field">
+        Email address
+        <input
+          id="login-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          placeholder="you@lab.edu"
+        />
+      </label>
+
+      <label class="wide-field">
+        Password
+        <input
+          id="login-password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          placeholder="Enter your password"
+        />
+      </label>
+
+    </div>
+
+    <div class="auth-demo">
+      <strong>Demo account</strong>
+      <span>admin@labledger.local · password: labledger</span>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="button button-quiet" id="cancel-login">
+        Cancel
+      </button>
+
+      <button type="submit" class="button button-primary">
+        Sign in
+      </button>
+    </div>
+
+  </form>
+</div>
+
     <div class="modal-backdrop" id="modal-backdrop" hidden>
       <form class="modal" id="add-form">
         <div class="modal-heading">
