@@ -38,6 +38,135 @@ function setCurrentUser(user) {
   }
 }
 
+function updateAuthUI() {
+  const loginButton = document.getElementById('login-button');
+  const userMenuButton = document.getElementById('user-menu-button');
+  const avatar = document.getElementById('user-avatar');
+
+  const user = getCurrentUser();
+
+  if (!loginButton || !userMenuButton || !avatar) return;
+
+  loginButton.hidden = Boolean(user);
+  userMenuButton.hidden = !user;
+
+  if (user) {
+    avatar.textContent =
+      user.initials ||
+      user.name?.slice(0, 2).toUpperCase() ||
+      'U';
+
+    userMenuButton.title =
+      `${user.name || user.email} · Click to sign out`;
+  }
+}
+
+function setupAuth() {
+  const loginButton = document.getElementById('login-button');
+  const userMenuButton = document.getElementById('user-menu-button');
+  const backdrop = document.getElementById('login-backdrop');
+  const form = document.getElementById('login-form');
+
+  const closeButton = document.getElementById('close-login');
+  const cancelButton = document.getElementById('cancel-login');
+  const error = document.getElementById('login-error');
+
+  if (!loginButton || !userMenuButton || !backdrop || !form) {
+    return;
+  }
+
+  function openLogin() {
+    error.hidden = true;
+    error.textContent = '';
+
+    form.reset();
+
+    backdrop.hidden = false;
+
+    document.getElementById('login-email').focus();
+  }
+
+  function closeLogin() {
+    backdrop.hidden = true;
+
+    form.reset();
+
+    error.hidden = true;
+    error.textContent = '';
+  }
+
+  loginButton.addEventListener('click', openLogin);
+
+  closeButton.addEventListener('click', closeLogin);
+
+  cancelButton.addEventListener('click', closeLogin);
+
+  backdrop.addEventListener('mousedown', (event) => {
+    if (event.target === backdrop) {
+      closeLogin();
+    }
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    const email =
+      String(formData.get('email') || '')
+        .trim()
+        .toLowerCase();
+
+    const password =
+      String(formData.get('password') || '');
+
+    if (
+      email !== DEMO_ACCOUNT.email ||
+      password !== DEMO_ACCOUNT.password
+    ) {
+      error.textContent =
+        'Incorrect email or password. Use the demo account shown below for now.';
+
+      error.hidden = false;
+
+      return;
+    }
+
+    setCurrentUser({
+      email: DEMO_ACCOUNT.email,
+      name: DEMO_ACCOUNT.name,
+      initials: DEMO_ACCOUNT.initials,
+    });
+
+    updateAuthUI();
+
+    closeLogin();
+
+    showToast(`Signed in as ${DEMO_ACCOUNT.name}`);
+  });
+
+  userMenuButton.addEventListener('click', () => {
+    const user = getCurrentUser();
+
+    if (!user) return;
+
+    const shouldLogout =
+      window.confirm(
+        `Sign out of ${user.name || user.email}?`
+      );
+
+    if (!shouldLogout) return;
+
+    setCurrentUser(null);
+
+    updateAuthUI();
+
+    showToast('You have been signed out');
+  });
+
+  updateAuthUI();
+}
+
 function getStatus(reagent) {
   const daysToExpiry = reagent.expiry_date ? Math.ceil((new Date(reagent.expiry_date + 'T00:00:00').getTime() - Date.now()) / 86400000) : 999;
   if (reagent.quantity <= reagent.minimum_quantity) return { label: 'Restock soon', tone: 'warning' };
@@ -259,4 +388,5 @@ document.addEventListener('DOMContentLoaded', () => {
   setupModal();
   setupSearch();
   setupActionButtons();
+  setupAuth();
 });
